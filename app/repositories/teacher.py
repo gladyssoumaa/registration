@@ -1,27 +1,26 @@
 from database import get_connection
 
-def add_trainer(first_name, last_name, email, id_number):
+
+def add_teacher(name, email, course, teacher_id):
     with get_connection() as connection:
-        connection.execute(
-            'INSERT INTO trainers(first_name, last_name, email,id_number) VALUES (?,?,?,?)',
-            (first_name, last_name, email, id_number),
+         connection.execute('INSERT INTO teachers (name, email, course, teacher_id) VALUES (?,?,?,?)',
+             (name, email, course, teacher_id)
         )
 
-def get_trainer():
+def get_teachers():
     with get_connection() as connection:
-        connection.execute('SELECT * FROM trainers').fetchall()
+        return connection.execute('SELECT * FROM teachers').fetchall()
 
-def get_teacher(trainer_id):
+def get_teacher(teacher_id):
     with get_connection() as connection:
-        return connection.execute('SELECT * FROM teachers WHERE id = ?',(trainer_id,)).fetchone()
+        return connection.execute('SELECT * FROM teachers WHERE id = ?',(teacher_id,)).fetchone()
 
-def update_trainer(first_name, last_name, email, id_number):
+def update_teacher(id, name, email, course, teacher_id):
     with get_connection() as connection:
-        connection.execute(
-            'UPDATE students SET first_name=?, last_name=?, email=?,  id_number=? WHERE trainer_id=?',
-            (first_name, last_name, email, id_number),
-        )
+        connection.execute('UPDATE teachers SET name = ?, email = ?, course = ?, teacher_id = ? WHERE ID = ?',
+                (name, email, course, teacher_id, id)
+                )
 
-def delete_trainer(trainer_id):
+def delete_teacher(id):
     with get_connection() as connection:
-        connection.execute('DELETE FROM trainers WHERE trainer_id = ?', (trainer_id,))
+        connection.execute('DELETE FROM teachers WHERE id = ?',(id,))

@@ -1,27 +1,38 @@
 from fastapi import APIRouter
-from schemas.course import Courses
+from schemas.course import Course
 from repositories.course import(
-    add_courses,
-    list_courses,
+    add_course,
+    get_course,
+    get_courses,
+    update_course,
     delete_course,
 )
-router = APIRouter(prefix="/courses", tags=["course"])
 
+router = APIRouter(prefix="/course",tags=["courses"])
+@router.get("")
+def list_courses():
+    return get_courses()
 
-courses =[]
 
 @router.post("")
-def display_courses(course: Courses):
-    add_courses(course.course_id, course.title, course.trainer_id, course.first_name)
-    return {"message": "courses created", "course": Courses}
+def register_courses(course: Course):
+    add_course(course.name, course.teacher_name, course.course_id)
+    return {"message": "Course registered successfully", "course": course}
+
 
 @router.get("/{course_id}")
-def course(course_id: int):
-    course= list_courses(course_id)
+def course_detail(id: int):
+    course = get_course(id)
     return course
 
-@router.delete("/{course_id}")
-def delete_course_details(course: Courses):
-    delete_course(course.course_id)
-    return{"message": "deleted from records"}
 
+@router.put("/{courses_id}")
+def replace_course(id: int, course: Course):
+    update_course(id, course.name, course.teacher_name, course.course_id)
+    return {"message": "Course record updated successfully", "course": course}
+
+
+@router.delete("/{course_id}")
+def remove_course(id: int):
+    delete_course(id)
+    return {"message": "Course record deleted successfully"}

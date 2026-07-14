@@ -1,37 +1,41 @@
 from fastapi import APIRouter
 from schemas.teacher import Teacher
-from repositories.teacher import (
-    add_trainer,
-    get_trainer,
-    update_trainer,
-    delete_trainer,
+from repositories.teacher import(
+    get_teacher,
+    get_teachers,
+    update_teacher,
+    delete_teacher,
+    add_teacher
+
+
 )
-router = APIRouter(prefix="/trainers", tags=["trainer"])
+router = APIRouter(prefix="/teacher",tags=["teachers"])
+@router.get("/teachers")
+def list_teachers():
+    return get_teachers()
 
-
-teachers =[]
 
 @router.post("")
-def register_trainer(teacher: Teacher):
-    add_trainer(teacher.first_name, teacher.last_name, teacher.email, teacher.id_number, teacher.phone_number)
-    return {"message": "Trainer added", "teacher": Teacher}
+def register_teacher(teacher: Teacher):
+    add_teacher(teacher.name, teacher.email, teacher.course, teacher.teacher_id)
+    return {"message": "Teacher registered successfully", "teacher": teacher}
 
-@router.get("")
-def list_trainer(teacher: Teacher):
-    teacher= get_trainer()
+
+@router.get("{teacher_id}")
+def teacher_detail(id: int):
+    teacher = get_teacher(id)
     return teacher
 
-@router.put("/{trainer_id}")
-def trainer_details(teacher: Teacher):
-    update_trainer(teacher.first_name, teacher.last_name, teacher.email, teacher.id_number, teacher.phone_number)
-    return{"message": "records updated"}
 
-@router.delete("/{trainer_id}")
-def delete_trainer_details(teacher: Teacher):
-    delete_trainer(teacher.trainer_id)
-    return{"message": "deleted from records"}
+@router.put("/{teachers_id}")
+def replace_teacher(id: int, teacher: Teacher):
+    update_teacher(
+        id, teacher.name, teacher.email, teacher.course, teacher.teacher_id
+    )
+    return {"message": "Teacher record updated successfully", "teacher": teacher}
 
-@router.get("{trainer_id}")
-def trainer_details(trainer_id: int):
-    teacher = get_trainer(trainer_id)
-    return teacher
+
+@router.delete("{teachers_id}")
+def remove_teacher(id: int):
+    delete_teacher(id)
+    return {"message": "Teacher record deleted successfully"}

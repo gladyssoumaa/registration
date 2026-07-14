@@ -1,15 +1,14 @@
 from fastapi import APIRouter
 from schemas.student import Student
 from repositories.student import(
-    get_students,
     add_student,
-    update_students,
+    get_students,
+    get_student,
+    update_student,
     delete_student,
 )
-router = APIRouter(prefix="/students", tags=["students"])
 
-
-students = []
+router = APIRouter(prefix="/students",tags=["students"])
 
 @router.get("")
 def list_students():
@@ -18,21 +17,28 @@ def list_students():
 
 
 @router.post("")
-def register_student(student:Student):
-    add_student(student.name, student.age, student.email, student.country, student.id_number, student.reg_number)
-    return{"Message": "Student registered", "student":Student}
+def register_student(student: Student):
+    add_student(
+        student.name, student.age, student.email, student.country, student.id_number
+    )
+    return {"message": "student registered", "student": student}
 
-@router.put("/{student_id}")
-def student_details(student: Student):
-    update_students(student.name, student.age, student.email, student.country, student.student_id, student.reg_number)
-    return{"message": "records updated"}
-
-@router.delete("/{student_id}")
-def delete_student_details(student: Student):
-    delete_student(student.student_id)
-    return{"message": "deleted from records"}
 
 @router.get("/{student_id}")
-def student_detail(student_id: int):
-    student = get_students(student_id)
+def student_detail(id: int):
+    student = get_student(id)
     return student
+
+
+@router.put("/s{student_id}")
+def edit_student(id: int, student: Student):
+    update_student(
+        id, student.name, student.age, student.email, student.country, student.id_number
+    )
+    return {"message": "student updated", "student": student}
+
+
+@router.delete("/{student_id}")
+def remove_student(id: int):
+    delete_student(id)
+    return {"message": "student deleted"}

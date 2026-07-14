@@ -1,11 +1,12 @@
 from database import get_connection
 
+
 def create_table():
     with get_connection() as connection:
-        connection.execute('''CREATE TABLE IF NOT EXISTS trainers(
-                           trainer_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                           first_name TEXT NOT NULL,
-                           last_name TEXT NOT NULL,
-                           email TEXT NOT NULL,
-                           id_number INTEGER NOT NULL
-                           )''')
+        connection.execute('''CREATE TABLE IF NOT EXISTS teachers(
+                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                     name TEXT NOT NULL,
+                     email TEXT NOT NULL,
+                     course TEXT NOT NULL,
+                     teacher_id INTEGER NOT NULL
+                    )''')
